@@ -1,5 +1,44 @@
 .navbar {
   width: 100%;
-  background-color: black;
   padding: 20px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-img {
+  object-fit: contain;
+}
+
+.nav-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  width: 100px;
+  border-radius: 15px;
+  border: none;
+  height: 30px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.nav-btn1 {
+  background-color: black;
+  color: white;
+  transition: all 1s;
+}
+
+.nav-btn2 {
+  background-color: orangered;
+  color: white;
+  transition: all 1s;
+}
+
+.nav-btn1:hover {
+  background-color: rgb(63, 61, 61);
+}
+.nav-btn2:hover {
+  background-color: rgb(211, 57, 1);
 }
