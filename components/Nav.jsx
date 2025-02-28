@@ -1,13 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "../styles/Nav.css";
 import { useState } from "react";
+import { signUp, signIn, getProviders, signOut } from "next-auth/react";
 
 const Nav = () => {
   const [loggedIn, setLoggedIn] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [providers, setProviders] = useState(null);
+
+  useEffect(() => {
+    const settingProviders = async () => {
+      const response = await getProviders();
+      alert(response);
+      setProviders(response);
+    };
+    settingProviders();
+  }, []);
+
   return (
     <nav className="navbar">
       <Link href="/">
@@ -24,41 +37,65 @@ const Nav = () => {
           <div className="nav-btns">
             <button className="nav-btn nav-btn1">Signup</button>
             <button className="nav-btn nav-btn2">Login</button>
-
-            <button
-              className="menu-toggle"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              ☰
-            </button>
-
-            {/* Mobile Dropdown Menu */}
-            <ul className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-              <li>
-                <Link href="/" onClick={() => setMenuOpen(false)}>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" onClick={() => setMenuOpen(false)}>
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" onClick={() => setMenuOpen(false)}>
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" onClick={() => setMenuOpen(false)}>
-                  Contact
-                </Link>
-              </li>
-            </ul>
           </div>
         ) : (
-          <>{/* Mobile Menu Button */}</>
+          <>
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button key={provider.name} onClick={() => signIn(provider.id)}>
+                  Sign in with {provider.name}
+                </button>
+              ))}
+          </>
         )}
+
+        <div className="dropdown">
+          <button
+            className="menu-toggle"
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            ☰
+          </button>
+
+          {/* Mobile Dropdown Menu */}
+          {menuOpen ? (
+            <ul className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+              <li>
+                <Link href="/profile" onClick={() => setMenuOpen(false)}>
+                  My Profile{" "}
+                </Link>
+              </li>
+              <li>
+                <Link href="/create-post" onClick={() => setMenuOpen(false)}>
+                  Create Post
+                </Link>
+              </li>
+
+              <button
+                className="signout"
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  signOut();
+                }}
+              >
+                Signout
+              </button>
+            </ul>
+          ) : (
+            <>
+              {providers &&
+                Object.values(providers).map((provider) => (
+                  <button
+                    key={provider.name}
+                    onClick={() => signIn(provider.id)}
+                  >
+                    Sign in with {provider.name}
+                  </button>
+                ))}
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

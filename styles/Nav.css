@@ -42,3 +42,54 @@
 .nav-btn2:hover {
   background-color: rgb(211, 57, 1);
 }
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  color: black;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  list-style: none;
+  border-radius: 12px;
+  gap: 15px;
+  text-align: center;
+  background: #a5a5a5;
+  padding: 20px;
+  position: absolute;
+
+  top: 60px;
+  right: 20px;
+}
+.mob-nav {
+  display: none;
+}
+
+.mobile-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-btn {
+    display: none;
+  }
+
+  .menu-toggle,
+  .mob-nav {
+    display: block;
+  }
+}

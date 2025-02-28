@@ -1,6 +1,6 @@
 import React from "react";
 import "./layout.css";
-
+import Provider from "../components/Provider";
 import Nav from "../components/Nav";
 
 export const metadata = {
@@ -12,13 +12,15 @@ const Layout = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <div className="main-container">
-          <main className="main">
-            <Nav />
+        <Provider>
+          <div className="main-container">
+            <main className="main">
+              <Nav />
 
-            {children}
-          </main>
-        </div>
+              {children}
+            </main>
+          </div>
+        </Provider>
       </body>
     </html>
   );
