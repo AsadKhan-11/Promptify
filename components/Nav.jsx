@@ -5,7 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import "../styles/Nav.css";
 import { useState } from "react";
-import { signUp, signIn, getProviders, signOut } from "next-auth/react";
+import {
+  signUp,
+  signIn,
+  getProviders,
+  signOut,
+  useSession,
+} from "next-auth/react";
 
 const Nav = () => {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -15,11 +21,12 @@ const Nav = () => {
   useEffect(() => {
     const settingProviders = async () => {
       const response = await getProviders();
-      alert(response);
+
       setProviders(response);
     };
     settingProviders();
   }, []);
+  const { data: session } = useSession();
 
   return (
     <nav className="navbar">
@@ -33,21 +40,38 @@ const Nav = () => {
         />
       </Link>
       <div className="nav-sec">
-        {loggedIn ? (
-          <div className="nav-btns">
-            <button className="nav-btn nav-btn1">Signup</button>
-            <button className="nav-btn nav-btn2">Login</button>
-          </div>
-        ) : (
-          <>
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <button key={provider.name} onClick={() => signIn(provider.id)}>
-                  Sign in with {provider.name}
-                </button>
-              ))}
-          </>
-        )}
+        <div className="desktop-container">
+          {session?.user ? (
+            <div className="nav-btns">
+              <button className="nav-btn nav-btn1">
+                <Link href="/create-post">Create Post</Link>
+              </button>
+              <button className="nav-btn nav-btn2">Signout</button>
+              <Link href="/my-profile">
+                <Image
+                  src={session.user.image}
+                  className="profile-img"
+                  height={37}
+                  width={37}
+                  alt="Logo"
+                />
+              </Link>
+            </div>
+          ) : (
+            <div>
+              {providers &&
+                Object.values(providers).map((provider) => (
+                  <button
+                    className="nav-btn nav-btn1"
+                    key={provider.name}
+                    onClick={() => signIn(provider.id)}
+                  >
+                    Sign in
+                  </button>
+                ))}
+            </div>
+          )}
+        </div>
 
         <div className="dropdown">
           <button
@@ -58,7 +82,7 @@ const Nav = () => {
           </button>
 
           {/* Mobile Dropdown Menu */}
-          {menuOpen ? (
+          {session?.user ? (
             <ul className={`mobile-menu ${menuOpen ? "open" : ""}`}>
               <li>
                 <Link href="/profile" onClick={() => setMenuOpen(false)}>
@@ -72,7 +96,7 @@ const Nav = () => {
               </li>
 
               <button
-                className="signout"
+                className="nav-btn nav-btn1"
                 type="button"
                 onClick={() => {
                   setMenuOpen(false);
@@ -83,17 +107,18 @@ const Nav = () => {
               </button>
             </ul>
           ) : (
-            <>
+            <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
               {providers &&
                 Object.values(providers).map((provider) => (
                   <button
+                    className="nav-btn1 nav-btn"
                     key={provider.name}
                     onClick={() => signIn(provider.id)}
                   >
-                    Sign in with {provider.name}
+                    Sign in
                   </button>
                 ))}
-            </>
+            </div>
           )}
         </div>
       </div>

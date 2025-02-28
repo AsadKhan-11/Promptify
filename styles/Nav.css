@@ -9,10 +9,14 @@
 .nav-img {
   object-fit: contain;
 }
+.profile-img {
+  border-radius: 50%;
+}
 
 .nav-btns {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .nav-btn {
@@ -68,7 +72,7 @@
   top: 60px;
   right: 20px;
 }
-.mob-nav {
+.dropdown {
   display: none;
 }
 
@@ -81,15 +85,18 @@
 .mobile-menu.open {
   display: flex;
 }
+.nav-btns a {
+  text-decoration: none;
+  color: white;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-  .nav-btn {
+  .desktop-container {
     display: none;
   }
-
   .menu-toggle,
-  .mob-nav {
+  .dropdown {
     display: block;
   }
 }
